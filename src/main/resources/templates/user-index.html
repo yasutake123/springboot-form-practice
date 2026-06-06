@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Formの練習画面</h2>
+    <form th:action="@{/user-submit}" th:object="${userForm}" method="post">
+        <label for="userName">お名前:</label>
+        <input type="text" id="userName" th:field="*{userName}" />
+        <button type="submit">送信</button>
+    </form>
+    
+    <hr>
+
+    <div th:if="${message}">
+        <p th:text="${message}" style="color: blue;" font-weight="bold"></p>
+    </div>
+</body>
+</html>
