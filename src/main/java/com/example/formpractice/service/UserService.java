@@ -22,7 +22,18 @@ public class UserService {
         userRepository.save(entity);
     }
 
-    public List<UserEntity> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll().stream()
+            .map(userEntity -> {
+                UserDto dto = new UserDto();
+                dto.setUserName(userEntity.getUserName());
+                dto.setAge(userEntity.getAge());
+                return dto;
+            })
+                .toList();
+    }
+
+    public void deleteUser(String name) {
+        userRepository.deleteByUserName(name);
     }
 }
