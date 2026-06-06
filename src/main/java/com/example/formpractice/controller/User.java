@@ -32,6 +32,11 @@ public class User {
 
     @PostMapping("/user-submit")
     public String submitForm(@Valid @ModelAttribute UserForm userForm, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "user-index";
+        }
+        
+        String userName = userForm.getUserName();
         UserDto dto = new UserDto();
         dto.setUserName(userForm.getUserName());
         dto.setAge(userForm.getAge());
@@ -39,11 +44,7 @@ public class User {
 
         List<UserEntity> userList = userService.getAllUsers();
         model.addAttribute("userList", userList);
-
-        if (result.hasErrors()) {
-            return "user-index";
-        }
-        String userName = userForm.getUserName();
+        
         Integer age = userForm.getAge();
         String message = age < 20 
             ? "こんにちは、" + userName + "さん！（" + age + "歳）"
