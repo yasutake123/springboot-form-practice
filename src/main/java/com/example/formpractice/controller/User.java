@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.formpractice.form.UserForm;
 import com.example.formpractice.service.UserService;
@@ -26,6 +27,9 @@ public class User {
     @GetMapping("/user-form")
     public String showForm(Model model) {
         model.addAttribute("userForm", new UserForm());
+
+        List<UserDto> userList = userService.getAllUsers();
+        model.addAttribute("userList", userList);
         return "user-index";
     }
 
@@ -50,7 +54,15 @@ public class User {
             : "こんにちは、" + userName + "さん！（" + age + "歳）※成人です";
         model.addAttribute("message", message);
         model.addAttribute("age", age);
-        return "user-index";
+        return "redirect:/user-form";
+    }
+
+    @GetMapping("/user-delete/{name}")
+    public String deleteUser(@PathVariable("name") String name, Model model) {
+        userService.deleteUser(name);
+        List<UserDto> userList = userService.getAllUsers();
+        model.addAttribute("userList", userList);
+        return "redirect:/user-form";
     }
     
     

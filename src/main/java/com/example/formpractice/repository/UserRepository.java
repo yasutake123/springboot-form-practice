@@ -19,5 +19,9 @@ public class UserRepository {
     public List<UserEntity> findAll() {
         return users;
     }
+
+    public void deleteByUserName(String name) {
+        users.removeIf(user -> user.getUserName().equals(name));
+    }
     
 }

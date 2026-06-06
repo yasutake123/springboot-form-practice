@@ -32,4 +32,8 @@ public class UserService {
             })
                 .toList();
     }
+
+    public void deleteUser(String name) {
+        userRepository.deleteByUserName(name);
+    }
 }

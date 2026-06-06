@@ -30,6 +30,8 @@
     <ul>
         <li th:each="user : ${userList}">
             <span th:text="${user.userName}"></span> - <span th:text="${user.age}"></span>歳
+            <button type="button" th:onclick="|location.href='@{/user-delete/{name}(name=${user.userName})}'|">削除</button>
+
         </li>
     </ul>
 </body>
