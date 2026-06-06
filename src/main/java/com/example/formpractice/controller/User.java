@@ -38,13 +38,14 @@ public class User {
         if (result.hasErrors()) {
             return "user-index";
         }
-        
-        String userName = userForm.getUserName();
+
         UserDto dto = new UserDto();
         dto.setUserName(userForm.getUserName());
         dto.setAge(userForm.getAge());
         try {
-            userService.saveUser(dto);
+            String message = userService.saveUser(dto);
+            model.addAttribute("message", message);
+            model.addAttribute("age", userForm.getAge());
         } catch (IllegalArgumentException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "user-index";
@@ -53,13 +54,7 @@ public class User {
         List<UserDto> userList = userService.getAllUsers();
         model.addAttribute("userList", userList);
         
-        Integer age = userForm.getAge();
-        String message = age < 20 
-            ? "こんにちは、" + userName + "さん！（" + age + "歳）"
-            : "こんにちは、" + userName + "さん！（" + age + "歳）※成人です";
-        model.addAttribute("message", message);
-        model.addAttribute("age", age);
-        return "redirect:/user-form";
+        return "user-index";
     }
 
     @GetMapping("/user-delete/{name}")
