@@ -25,5 +25,12 @@
         <p th:text="${message}"
             th:style="${age >= 20 ? 'color: blue;' : 'color: red;'}" font-weight="bold"></p>
     </div>
+
+    <h3>ユーザー一覧</h3>
+    <ul>
+        <li th:each="user : ${userList}">
+            <span th:text="${user.userName}"></span> - <span th:text="${user.age}"></span>歳
+        </li>
+    </ul>
 </body>
 </html>

@@ -1,5 +1,7 @@
 package com.example.formpractice.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,5 +20,9 @@ public class UserService {
         entity.setUserName(user.getUserName());
         entity.setAge(user.getAge());
         userRepository.save(entity);
+    }
+
+    public List<UserEntity> getAllUsers() {
+        return userRepository.findAll();
     }
 }
