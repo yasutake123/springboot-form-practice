@@ -22,7 +22,8 @@ public class User {
     @PostMapping("/user-submit")
     public String submitForm(@ModelAttribute UserForm userForm, Model model) {
         String userName = userForm.getUserName();
-        model.addAttribute("message", "こんにちは、" + userName + "さん！");
+        String age = userForm.getAge();
+        model.addAttribute("message", "こんにちは、" + userName + "さん！ 年齢: " + age);
         return "user-index";
     }
     
