@@ -22,7 +22,8 @@
     <hr>
 
     <div th:if="${message}">
-        <p th:text="${message}" style="color: blue;" font-weight="bold"></p>
+        <p th:text="${message}"
+            th:style="${age >= 20 ? 'color: blue;' : 'color: red;'}" font-weight="bold"></p>
     </div>
 </body>
 </html>
