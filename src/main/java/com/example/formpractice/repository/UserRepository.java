@@ -23,5 +23,10 @@ public class UserRepository {
     public void deleteByUserName(String name) {
         users.removeIf(user -> user.getUserName().equals(name));
     }
+
+    public boolean hasUser(String name) {
+        return users.stream()
+            .anyMatch(user -> user.getUserName().equals(name));
+    }
     
 }

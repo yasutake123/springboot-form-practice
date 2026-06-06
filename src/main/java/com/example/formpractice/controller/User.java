@@ -43,7 +43,12 @@ public class User {
         UserDto dto = new UserDto();
         dto.setUserName(userForm.getUserName());
         dto.setAge(userForm.getAge());
-        userService.saveUser(dto);
+        try {
+            userService.saveUser(dto);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "user-index";
+        }
 
         List<UserDto> userList = userService.getAllUsers();
         model.addAttribute("userList", userList);

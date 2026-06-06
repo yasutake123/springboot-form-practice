@@ -17,6 +17,9 @@ public class UserService {
 
     public void saveUser(UserDto user) {
         UserEntity entity = new UserEntity();
+        if (userRepository.hasUser(user.getUserName())) {
+            throw new IllegalArgumentException("ユーザー名は既に存在しています");
+        }
         entity.setUserName(user.getUserName());
         entity.setAge(user.getAge());
         userRepository.save(entity);

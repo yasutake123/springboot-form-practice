@@ -17,6 +17,9 @@
             <p th:errors="*{userName}" style="color: red;" font-weight="bold"></p>
             <p th:errors="*{age}" style="color: red;" font-weight="bold"></p>
         </div>
+        <div th:if="${errorMessage}">
+            <p th:text="${errorMessage}" style="color: red;" font-weight="bold"></p>    
+        </div>
     </form>
     
     <hr>
