@@ -28,8 +28,12 @@ public class User {
             return "user-index";
         }
         String userName = userForm.getUserName();
-        String age = userForm.getAge();
-        model.addAttribute("message", "こんにちは、" + userName + "さん！ 年齢: " + age);
+        Integer age = userForm.getAge();
+        String message = age < 20 
+            ? "こんにちは、" + userName + "さん！（" + age + "歳）"
+            : "こんにちは、" + userName + "さん！（" + age + "歳）※成人です";
+        model.addAttribute("message", message);
+        model.addAttribute("age", age);
         return "user-index";
     }
     
