@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import com.example.formpractice.form.UserForm;
 import com.example.formpractice.service.UserService;
 import com.example.formpractice.dto.UserDto;
-import com.example.formpractice.entity.UserEntity;
 
 import jakarta.validation.Valid;
 
@@ -42,7 +41,7 @@ public class User {
         dto.setAge(userForm.getAge());
         userService.saveUser(dto);
 
-        List<UserEntity> userList = userService.getAllUsers();
+        List<UserDto> userList = userService.getAllUsers();
         model.addAttribute("userList", userList);
         
         Integer age = userForm.getAge();

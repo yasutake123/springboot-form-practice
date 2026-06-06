@@ -1,5 +1,6 @@
 package com.example.formpractice.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,14 @@ public class UserService {
         userRepository.save(entity);
     }
 
-    public List<UserEntity> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll().stream()
+            .map(userEntity -> {
+                UserDto dto = new UserDto();
+                dto.setUserName(userEntity.getUserName());
+                dto.setAge(userEntity.getAge());
+                return dto;
+            })
+                .toList();
     }
 }
