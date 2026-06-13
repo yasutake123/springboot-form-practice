@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.formpractice.form.UserForm;
 import com.example.formpractice.service.UserService;
+import com.example.formpractice.dto.ApiResponse;
 import com.example.formpractice.dto.UserDto;
 
 import jakarta.validation.Valid;
@@ -33,13 +34,13 @@ public class User {
     }
 
     @PostMapping("/user-submit")
-    public ResponseEntity<?> submitForm(@Valid @RequestBody UserForm userForm, BindingResult result) {
+    public ResponseEntity<ApiResponse> submitForm(@Valid @RequestBody UserForm userForm, BindingResult result) {
         if (result.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             for (FieldError error : result.getFieldErrors()) {
                 errors.put(error.getField(), error.getDefaultMessage());
             }
-            return ResponseEntity.badRequest().body(errors);
+            return ResponseEntity.badRequest().body(new ApiResponse("入力エラーが発生しました", errors));
         }
 
         UserDto dto = new UserDto();
@@ -52,12 +53,12 @@ public class User {
             Map<String, Object> response = new HashMap<>();
             response.put("message", message);
             response.put("userList", userService.getAllUsers());
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(new ApiResponse(message, response));
 
         } catch (IllegalArgumentException e) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("errorMessage", e.getMessage());
-            return ResponseEntity.badRequest().body(errorResponse);
+            Map<String, String> errors = new HashMap<>();
+            errors.put("errorMessage", e.getMessage());
+            return ResponseEntity.badRequest().body(new ApiResponse("エラーが発生しました", errors));
         }
     }
 
