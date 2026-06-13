@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -21,19 +22,21 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @RestController
+@RequestMapping("/api/users")
 public class User {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/user-form")
+    @GetMapping
     public List<UserDto> showForm() {
         return userService.getAllUsers();
     }
 
-    @PostMapping("/user-submit")
+    @PostMapping
     public ResponseEntity<ApiResponse> submitForm(@Valid @RequestBody UserForm userForm, BindingResult result) {
         if (result.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -62,7 +65,7 @@ public class User {
         }
     }
 
-    @GetMapping("/user-delete/{name}")
+    @DeleteMapping("/{name}")
     public List<UserDto> deleteUser(@PathVariable("name") String name) {
         userService.deleteUser(name);
         return userService.getAllUsers();
