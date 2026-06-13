@@ -1,13 +1,14 @@
 package com.example.formpractice.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.formpractice.form.UserForm;
@@ -17,54 +18,52 @@ import com.example.formpractice.dto.UserDto;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 
-@Controller
+@RestController
 public class User {
     @Autowired
     private UserService userService;
 
     @GetMapping("/user-form")
-    public String showForm(Model model) {
-        model.addAttribute("userForm", new UserForm());
-
-        List<UserDto> userList = userService.getAllUsers();
-        model.addAttribute("userList", userList);
-        return "user-index";
+    public List<UserDto> showForm() {
+        return userService.getAllUsers();
     }
 
     @PostMapping("/user-submit")
-    public String submitForm(@Valid @ModelAttribute UserForm userForm, BindingResult result, Model model) {
+    public ResponseEntity<?> submitForm(@Valid @RequestBody UserForm userForm, BindingResult result) {
         if (result.hasErrors()) {
-            return "user-index";
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError error : result.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(errors);
         }
 
         UserDto dto = new UserDto();
         dto.setUserName(userForm.getUserName());
         dto.setAge(userForm.getAge());
-        try {
-            String message = userService.saveUser(dto);
-            model.addAttribute("message", message);
-            model.addAttribute("age", userForm.getAge());
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "user-index";
-        }
-
-        List<UserDto> userList = userService.getAllUsers();
-        model.addAttribute("userList", userList);
         
-        return "user-index";
+        try {
+            // 登録処理
+            String message = userService.saveUser(dto);
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", message);
+            response.put("userList", userService.getAllUsers());
+            return ResponseEntity.ok(response);
+
+        } catch (IllegalArgumentException e) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("errorMessage", e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
     }
 
     @GetMapping("/user-delete/{name}")
-    public String deleteUser(@PathVariable("name") String name, Model model) {
+    public List<UserDto> deleteUser(@PathVariable("name") String name) {
         userService.deleteUser(name);
-        List<UserDto> userList = userService.getAllUsers();
-        model.addAttribute("userList", userList);
-        return "redirect:/user-form";
+        return userService.getAllUsers();
     }
-    
-    
-
 }
