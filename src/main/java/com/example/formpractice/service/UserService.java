@@ -2,7 +2,6 @@ package com.example.formpractice.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.formpractice.dto.UserDto;
@@ -12,8 +11,11 @@ import com.example.formpractice.repository.UserRepository;
 @Service
 public class UserService {
     
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserService (UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public String saveUser(UserDto user) {
         UserEntity entity = new UserEntity();
