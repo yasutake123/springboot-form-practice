@@ -16,6 +16,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse> handleIllegalExeption(IllegalArgumentException e) {
         Map<String, String> errors = new HashMap<>();
         errors.put("errorMessage", e.getMessage());
-        return ResponseEntity.badRequest().body(ApiResponse.error("エラーが発生しました", errors));
+        return ResponseEntity.badRequest().body(new ApiResponse("エラーが発生しました", errors));
     }
 }

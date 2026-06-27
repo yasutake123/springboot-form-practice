@@ -45,7 +45,7 @@ public class User {
             for (FieldError error : result.getFieldErrors()) {
                 errors.put(error.getField(), error.getDefaultMessage());
             }
-            return ResponseEntity.badRequest().body(ApiResponse.error("入力エラーが発生しました", errors));
+            return ResponseEntity.badRequest().body(new ApiResponse("入力エラーが発生しました", errors));
         }
 
         UserDto dto = new UserDto();

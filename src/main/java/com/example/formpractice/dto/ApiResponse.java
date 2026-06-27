@@ -20,10 +20,6 @@ public class ApiResponse {
         this.errors = errors;
     }
 
-    public static ApiResponse error(String message, Map<String,String> errors) {
-        return new ApiResponse(message, errors);
-    }
-
     public boolean isSuccess() { return success; }
     public String getMessage() { return message; }
     public Object getData() { return UsersData; }
