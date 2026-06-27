@@ -45,26 +45,18 @@ public class User {
             for (FieldError error : result.getFieldErrors()) {
                 errors.put(error.getField(), error.getDefaultMessage());
             }
-            return ResponseEntity.badRequest().body(new ApiResponse("入力エラーが発生しました", errors));
+            return ResponseEntity.badRequest().body(ApiResponse.error("入力エラーが発生しました", errors));
         }
 
         UserDto dto = new UserDto();
         dto.setUserName(userForm.getUserName());
         dto.setAge(userForm.getAge());
         
-        try {
-            // 登録処理
-            String message = userService.saveUser(dto);
-            Map<String, Object> response = new HashMap<>();
-            response.put("message", message);
-            response.put("userList", userService.getAllUsers());
-            return ResponseEntity.ok(new ApiResponse(message, response));
-
-        } catch (IllegalArgumentException e) {
-            Map<String, String> errors = new HashMap<>();
-            errors.put("errorMessage", e.getMessage());
-            return ResponseEntity.badRequest().body(new ApiResponse("エラーが発生しました", errors));
-        }
+        String message = userService.saveUser(dto);
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", message);
+        response.put("userList", userService.getAllUsers());
+        return ResponseEntity.ok(new ApiResponse(message, response));
     }
 
     @DeleteMapping("/{name}")

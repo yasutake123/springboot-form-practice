@@ -12,12 +12,16 @@ public class ApiResponse {
         this.success = true;
         this.message = message;
         this.UsersData = data;
-    }
+        }
 
-    public ApiResponse(String message, Map<String, String> errors) {
-        this.success = true;
+    public ApiResponse (String message, Map<String, String> errors) {
+        this.success = false;
         this.message = message;
         this.errors = errors;
+    }
+
+    public static ApiResponse error(String message, Map<String,String> errors) {
+        return new ApiResponse(message, errors);
     }
 
     public boolean isSuccess() { return success; }
